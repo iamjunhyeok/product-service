@@ -1,5 +1,6 @@
 package com.iamjunhyeok.productservice.domain;
 
+import com.iamjunhyeok.productservice.exception.ProductServiceCustomException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,4 +28,10 @@ public class Product {
 
     private int quantity;
 
+    public void reduceQuantity(int quantity) {
+        if (this.quantity < quantity) {
+            throw new ProductServiceCustomException("Product does not have sufficient Quantity");
+        }
+        this.quantity -= quantity;
+    }
 }

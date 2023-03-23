@@ -5,7 +5,6 @@ import com.iamjunhyeok.productservice.dto.ProductAddRequest;
 import com.iamjunhyeok.productservice.dto.ProductViewResponse;
 import com.iamjunhyeok.productservice.exception.ProductServiceCustomException;
 import com.iamjunhyeok.productservice.repository.ProductRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -43,5 +42,16 @@ public class ProductService {
         BeanUtils.copyProperties(product, response);
 
         return response;
+    }
+
+    public void reduceQuantity(Long id, int quantity) {
+        log.info("Reduce Quantity {} for Id : {}", quantity, id);
+
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductServiceCustomException("Product with given id not found"));
+
+        product.reduceQuantity(quantity);
+        productRepository.save(product);
+
+        log.info("Product Quantity updated Successfully");
     }
 }
